@@ -1,22 +1,47 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { AppContext } from "../context/context";
+import { useRouter } from 'next/router'
+import Link from 'next/link';
+import {CustomButton} from "../components"
+import {avatar} from "../assets"
 
-const Header = ({ account, connectWallet }) => {
+
+
+const Header = () => {
+  const { currentAccount, connectWallet } = useContext(AppContext);
+  const [isActive, setIsActive] = useState('Create-Blog');
+  const [toggleDrawer, setToggleDrawer] = useState(false);
+  const router = useRouter()
+
+
+
   return (
-    <div className="bg-black flex items-center justify-center ">
-      <div className="mt-12">
-        {account ? (
-          <button className="bg-red-400 text-white px-5 py-2  rounded-md text-center mb-14">
-            {account.slice(0, 4)}...{account.slice(-4)}
-          </button>
-        ) : (
-          <button
-            className="bg-red-400 text-white px-5 py-2  rounded-md text-center mb-14"
-            onClick={connectWallet}
-          >
-            Connect
-          </button>
-        )}
-      </div>
+    <div className=" ">
+      <nav className="flex items-center justify-between">
+        <div className="flex items-center space-x-5">
+        <Link href="/">
+          <img src="logo.jpg" className=" w-14 h-14 rounded-full" alt="logo" />
+        </Link>
+          <h1 className="text-xl font-semibold">WebdevAnas</h1>
+        </div>
+        <div className="flex items-center space-x-3">
+        <CustomButton 
+          btnType="button"
+          title={currentAccount ? 'Create Blog' : 'Connect'}
+          styles={currentAccount ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+          handleClick={() => {
+            if(currentAccount) router.push('create-blog')
+            else connectWallet()
+          }} />
+
+          <Link href="/profile">
+          <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
+            <img src={avatar} alt="user" className="w-[60%] h-[60%] object-contain" />
+          </div>
+          </Link>
+
+        </div>
+      </nav>
     </div>
   );
 };
