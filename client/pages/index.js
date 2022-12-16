@@ -1,7 +1,24 @@
 import Head from "next/head";
-import { Header } from "../components";
+import { Header,DisplayBlogs } from "../components";
+import { useState, useEffect,  useContext} from "react";
+import {AppContext} from "../context/context"
 
 export default function Home() {
+  const [blogs, setBlogs] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
+  const {getAllBlogs} = useContext(AppContext);
+
+  const fetchBlogs = async() => {
+    setIsLoading(true);
+    const data = await getAllBlogs();
+    console.log(data)
+    setBlogs(data);
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchBlogs()
+  }, [])
   return (
     <div className="max-w-7xl mx-auto p-4">
       <Head>
@@ -12,7 +29,14 @@ export default function Home() {
 
       <Header />
 
-      <h1 className="text-3xl">Home</h1>
+
+      <main className=" mt-20 text-black">
+      <DisplayBlogs
+        title="All Blogs"
+        isLoading={isLoading}
+        blogs={blogs}
+      />
+      </main>
     </div>
   );
 }

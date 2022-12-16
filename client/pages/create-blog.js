@@ -16,7 +16,7 @@ export default function CreateBlog() {
   const handleFormFieldChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value });
   };
-
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,7 +33,6 @@ export default function CreateBlog() {
     });
   };
 
-  const router = useRouter();
   return (
     <div className="bg-black flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
       {isLoading && <Loader />}
@@ -69,7 +68,7 @@ export default function CreateBlog() {
           labelName="Blog Content"
           placeholder="Write your content"
           isTextArea
-          value={form.description}
+          value={form.content}
           handleChange={(e) => handleFormFieldChange("content", e)}
         />
 

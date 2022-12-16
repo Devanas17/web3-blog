@@ -17,9 +17,9 @@ const FormField = ({ labelName, placeholder, inputType, isTextArea, value, handl
         />
       ) : (
         <input 
-          required
+          required 
           value={value}
-          onChange={handleChange}
+          onChange={handleChange} 
           type={inputType}
           step="0.1"
           placeholder={placeholder}

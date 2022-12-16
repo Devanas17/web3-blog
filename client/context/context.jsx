@@ -49,19 +49,22 @@ export const AppProvider = ({ children }) => {
 
   const publishBlog = async (form) => {
     try {
-      const { ethereum } = window;
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
-          contractABI,
           contractAddress,
+          contractABI,
           signer
         );
+
         console.log("Going to pop wallet now to pay gas...");
         const tx = await contract.createBlog(
           form.title, // title
-          form.content, // content
+          form.content, // description
+          // new Date(form.deadline).getTime(), // deadline,
+          // form.target,
           form.image
         );
         await tx.wait();
@@ -69,12 +72,44 @@ export const AppProvider = ({ children }) => {
         console.log("contract call success", tx);
       }
     } catch (error) {
-      console.log("There is a error in publish blog", error);
+      console.log("Create Campaign Failed", error);
     }
   };
 
+  const getAllBlogs = async() => {
+    try {
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        // await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
+
+        const blogs = await contract.getBlogs()
+        
+        const parsedBlogs = blogs.map((blog, i) => ({
+          blogId: i,
+          author: blog.author,
+          title: blog.title,
+          content: blog.content,
+          image: blog.image
+        }))
+        // console.log("contract call success", parsedBlogs);
+
+        return parsedBlogs;
+      }
+    } catch (error) {
+      console.log("Create Campaign Failed", error);
+    }
+  }
+
+
+
   return (
-    <AppContext.Provider value={{ currentAccount, connectWallet, publishBlog }}>
+    <AppContext.Provider value={{ currentAccount, connectWallet, publishBlog, getAllBlogs }}>
       {children}
     </AppContext.Provider>
   );

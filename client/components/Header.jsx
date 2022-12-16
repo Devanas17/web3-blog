@@ -3,16 +3,14 @@ import { AppContext } from "../context/context";
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 import {CustomButton} from "../components"
-import {avatar} from "../assets"
 
 
 
 const Header = () => {
-  const { currentAccount, connectWallet } = useContext(AppContext);
+  const { currentAccount, connectWallet, name } = useContext(AppContext);
   const [isActive, setIsActive] = useState('Create-Blog');
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const router = useRouter()
-
 
 
   return (
@@ -35,8 +33,8 @@ const Header = () => {
           }} />
 
           <Link href="/profile">
-          <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
-            <img src={avatar} alt="user" className="w-[60%] h-[60%] object-contain" />
+          <div className="w-16 h-16 rounded-full bg-blue-900  flex justify-center items-center cursor-pointer">
+            <img src="avatar.png" alt="user" className="w-[60%] h-[60%] object-contain" />
           </div>
           </Link>
 
